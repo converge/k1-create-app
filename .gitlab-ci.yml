@@ -1,0 +1,9 @@
+stages:
+  - publish # name is publish-app-image
+
+publish:
+  image: "${BUILDER_IMAGE}"
+  stage: publish
+  script:
+    - echo "commit sha $CI_COMMIT_SHA"
+

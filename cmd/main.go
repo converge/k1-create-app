@@ -9,6 +9,8 @@ import (
 
 func main() {
 
+	log.Logger = log.With().Caller().Logger()
+
 	createAppFlag := flag.Bool("create-app", false, "Create Kubefirst Go Application")
 	languageFlag := flag.String("language", "", "Set application programming language to be created")
 	gitHubUser := flag.String("gh-user", "", "GitHub user")
@@ -37,7 +39,7 @@ func main() {
 	}
 
 	// download template
-	err := gitClient.DownloadTemplate(*gitHubUser, *gitHubToken)
+	repo, err := gitClient.DownloadTemplate(*gitHubUser, *gitHubToken)
 	if err != nil {
 		log.Err(err).Msg("")
 		return
@@ -61,16 +63,9 @@ func main() {
 		return
 	}
 
-	repo, err := gitClient.SwitchToGitLab(*gitLabToken)
-	if err != nil {
-		log.Err(err).Msg("")
-		return
-	}
-
 	err = gitClient.PushToGitLab(*gitLabToken, *repo)
 	if err != nil {
 		log.Err(err).Msg("")
 		return
 	}
-
 }
